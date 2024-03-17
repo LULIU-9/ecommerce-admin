@@ -2,6 +2,7 @@
 
 import { useStoreModal } from "@/hooks/use-store-modal";
 import { Modal } from "@/components/ui/modal";
+import axios from "axios";
 
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -17,6 +18,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -24,6 +27,8 @@ const formSchema = z.object({
 
 export const StoreModal = () => {
   const storeModal = useStoreModal();
+
+  const [isLoading, setIsLoading] = useState(false);
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -34,11 +39,21 @@ export const StoreModal = () => {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      setIsLoading(true);
+
+      const res = await axios.post("/api/stores", values);
+
+      toast.success("Successfully created a new store");
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
+      toast.error("Fail to create a store");
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <Modal
       title="Create a store"
@@ -55,7 +70,11 @@ export const StoreModal = () => {
               <FormItem>
                 <FormLabel>Store name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter a store name" {...field} />
+                  <Input
+                    placeholder="Enter a store name"
+                    {...field}
+                    disabled={isLoading}
+                  />
                 </FormControl>
 
                 <FormMessage />
@@ -63,10 +82,16 @@ export const StoreModal = () => {
             )}
           />
           <div className="flex justify-end gap-2 items-center">
-            <Button variant="outline" onClick={storeModal.onClose}>
+            <Button
+              variant="outline"
+              onClick={storeModal.onClose}
+              disabled={isLoading}
+            >
               Cancel
             </Button>
-            <Button type="submit">Submit</Button>
+            <Button type="submit" disabled={isLoading}>
+              Submit
+            </Button>
           </div>
         </form>
       </Form>
