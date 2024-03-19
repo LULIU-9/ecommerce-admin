@@ -46,7 +46,7 @@ export const StoreModal = () => {
       const res = await axios.post("/api/stores", values);
 
       // refresh to redirect
-      window.location.assign(`${res.data.id}`);
+      window.location.assign(`/${res.data.id}`);
       toast.success("Successfully created a new store");
     } catch (error) {
       console.log(error);
