@@ -15,5 +15,5 @@ export default function Home() {
     }
   }, [isOpen, onOpen]);
 
-  return <div className="h-screen">root page</div>;
+  return null;
 }
