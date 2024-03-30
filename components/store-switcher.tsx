@@ -63,9 +63,6 @@ const StoreSwitcher = ({ className, items = [] }: StoreSwitcherProps) => {
           aria-label="select a store"
           className={cn("w-[200px] justify-between", className)}
         >
-          {/* {value
-            ? frameworks.find((framework) => framework.value === value)?.label
-            : "Select framework..."} */}
           <StoreIcon className="mr-2 h-4 w-4" />
           {curStore?.label}
           <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
@@ -75,26 +72,25 @@ const StoreSwitcher = ({ className, items = [] }: StoreSwitcherProps) => {
       <PopoverContent className="w-[200px] p-0">
         <Command>
           <CommandInput placeholder="Search store..." />
+          <CommandEmpty>No store found.</CommandEmpty>
           <CommandList>
-            <CommandEmpty>No store found.</CommandEmpty>
             <CommandGroup heading="Stores">
               {formatedItems.map((item) => (
                 <CommandItem
                   key={item.value}
-                  value={item.value}
                   onSelect={() => onStoreSelect(item)}
                   className="text-sm"
                 >
                   <StoreIcon className="mr-4 h-4 w-4" />
+                  {item.label}
                   <Check
                     className={cn(
-                      "mr-2 h-4 w-4",
+                      "ml-auto h-4 w-4",
                       curStore?.value === item.value
                         ? "opacity-100"
                         : "opacity-0"
                     )}
                   />
-                  {item.label}
                 </CommandItem>
               ))}
             </CommandGroup>
