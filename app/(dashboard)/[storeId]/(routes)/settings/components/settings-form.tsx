@@ -1,6 +1,7 @@
 "use client";
 
 import { AlertModal } from "@/components/modals/alert-modal";
+import { APIAlert } from "@/components/ui/api-alert";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -125,6 +126,12 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
           </Button>
         </form>
       </Form>
+      <Separator />
+      <APIAlert
+        title="TEST_API"
+        description={`${origin}/api/${params.storeId}`}
+        variant="public"
+      />
     </>
   );
 };
